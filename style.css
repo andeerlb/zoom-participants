@@ -198,11 +198,6 @@ button.accordion:hover {
   margin-top: 10px;
 }
 
-.responsible_offline {
-  color: #ef4444;
-  font-weight: 900;
-}
-
 #summary {
   display: flex;
   flex-direction: row;
@@ -225,4 +220,12 @@ button.accordion:hover {
 
 #summary > p:nth-child(3) {
   color: white;
+}
+
+.online {
+  background-color: rgb(2, 82, 2) !important;
+}
+
+.offline {
+  background-color: #ef4444 !important;
 }

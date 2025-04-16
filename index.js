@@ -160,7 +160,11 @@ const summary = (accordionContainer, data) => {
 const accordionByLead = (accordionContainer, leadData) => {
     const accordion = document.createElement('button');
     accordion.classList.add('accordion');
-    accordion.innerHTML = `${leadData.responsibleOnline || leadData.responsible === "unknown" ? '' : '<span class=\'responsible_offline\'>(OFF)</span>'} ${leadData.responsible} (on: ${leadData.online.length} / off: ${leadData.offline.length})`;
+    accordion.textContent = `${leadData.responsible} (on: ${leadData.online.length} / off: ${leadData.offline.length})`;
+    if(leadData.responsible !== "unknown") {
+        accordion.classList.add(leadData.responsibleOnline ? 'online' : 'offline');
+    }
+
 
     const panel = document.createElement('div');
     panel.classList.add('panel');
