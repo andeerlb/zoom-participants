@@ -60,6 +60,10 @@ withoutPeople();
 
 const forceCheck = () => {
     document.getElementById('refreshRequired').classList.add('hide');
+    let summaryEl = document.getElementById('summary');
+    if(summaryEl) {
+        summaryEl.remove();
+    }
     withoutPeople();
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         chrome.tabs.sendMessage(tabs[0].id, { action: 'forceCheck' });
@@ -83,6 +87,7 @@ let intervalFirstLoad = setInterval(() => {
                 }
 
                 const accordionContainer = document.getElementById('accordionContainer');
+                summary(accordionContainer, message.data);
                 message.data.forEach(lead => {
                     accordionByLead(accordionContainer, lead);
                 });
@@ -112,16 +117,49 @@ document.getElementById('config-btn').addEventListener('click', () => {
 
 document.getElementById('reload-action').addEventListener('click', () => {
     showPage('home-page');
-    if(!refreshOnWay) {
+    if (!refreshOnWay) {
         refreshOnWay = true;
-        forceCheck();   
+        forceCheck();
     }
 });
+
+const summary = (accordionContainer, data) => {
+    const homePageContainer = document.getElementById('home-page');
+    const summaryContainer = document.createElement('div');
+    summaryContainer.id = 'summary';
+
+    let onlineCount = 0;
+    let offlineCount = 0;
+    let unknownOnlineCount = 0;
+
+    data.forEach(item => {
+
+        if (item.responsible === 'unknown') {
+            unknownOnlineCount += item.online.length;
+        } else {
+            onlineCount += item.online.length;
+            offlineCount += item.offline.length;
+
+            if(item.responsibleOnline) {
+                onlineCount++;
+            } else {
+                offlineCount++;
+            }
+        }
+    });
+
+
+    summaryContainer.innerHTML = `<p>on: ${onlineCount}</p>`;
+    summaryContainer.innerHTML += `<p>off: ${offlineCount}</p>`;
+    summaryContainer.innerHTML += `<p>unkown: ${unknownOnlineCount}</p>`;
+
+    homePageContainer.insertBefore(summaryContainer, accordionContainer);
+}
 
 const accordionByLead = (accordionContainer, leadData) => {
     const accordion = document.createElement('button');
     accordion.classList.add('accordion');
-    accordion.textContent = leadData.responsible + ` (on: ${leadData.online.length} / off: ${leadData.offline.length})`;
+    accordion.innerHTML = `${leadData.responsibleOnline || leadData.responsible === "unknown" ? '' : '<span class=\'responsible_offline\'>(OFF)</span>'} ${leadData.responsible} (on: ${leadData.online.length} / off: ${leadData.offline.length})`;
 
     const panel = document.createElement('div');
     panel.classList.add('panel');
@@ -249,7 +287,7 @@ saveBtn.addEventListener('click', () => {
             saveJsonToStorage(JSON.parse(textarea.value));
         }
         refreshRequired = true;
-        showStatus('JSON salved with success!', 'green');
+        showStatus('JSON saved with success!', 'green');
         document.getElementById('refreshRequired').classList.remove('hide');
     } catch (error) {
         showStatus('Invalid Json. Check your format.', 'red');

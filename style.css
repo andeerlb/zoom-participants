@@ -197,3 +197,32 @@ button.accordion:hover {
   align-items: center;
   margin-top: 10px;
 }
+
+.responsible_offline {
+  color: #ef4444;
+  font-weight: 900;
+}
+
+#summary {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+#summary > p:nth-child(1) {
+  color: green;
+}
+
+#summary > p:nth-child(2) {
+  color: #ef4444;
+}
+
+#summary > p:nth-child(3) {
+  color: white;
+}

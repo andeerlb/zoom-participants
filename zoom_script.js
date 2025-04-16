@@ -75,8 +75,10 @@ const checkParticipants = async (sidebarParticipants) => {
     let newModel = dataConfig.map(data => {
         const online = data.people.filter(name => currentVisibleNames.has(name));
         const offline = data.people.filter(name => !currentVisibleNames.has(name));
+        const responsibleOnline = currentVisibleNames.has(data.responsible);
         return {
             responsible: data.responsible,
+            responsibleOnline,
             online,
             offline
         };
