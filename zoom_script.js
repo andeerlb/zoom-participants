@@ -45,7 +45,7 @@ const loadConfig = async () => {
     try {
         let config = await getStorageSync();
 
-        if(!config) {
+        if (!config) {
             chrome.runtime.sendMessage({
                 origin: 'zoom_script',
                 action: 'no_json_config'
@@ -63,12 +63,12 @@ const loadConfig = async () => {
     }
 };
 
-const checkParticipants = async (sidebarParticipants) => {    
+const checkParticipants = async (sidebarParticipants) => {
     const currentVisibleNames = await collectAllVisibleParticipants(sidebarParticipants);
 
     let dataConfig = await loadConfig();
 
-    if(!dataConfig || !dataConfig.length){
+    if (!dataConfig || !dataConfig.length) {
         return;
     }
 
@@ -88,13 +88,13 @@ const checkParticipants = async (sidebarParticipants) => {
     currentVisibleNames.forEach(name => {
         let found = false;
         for (let i = 0; i < dataConfig.length; i++) {
-            if(dataConfig[i].responsible.includes(name) || dataConfig[i].people.includes(name)) {
+            if (dataConfig[i].responsible.includes(name) || dataConfig[i].people.includes(name)) {
                 found = true;
                 break;
             }
         }
-        if(!found) {
-            unknownLeadArray.push(name);   
+        if (!found) {
+            unknownLeadArray.push(name);
         }
     });
 
@@ -134,19 +134,37 @@ const openSidebarParticipants = (callBack) => {
     }
 };
 
-const main = () => {
+const findWcLoading = (doc) => {
+    try {
+        return doc.getElementById('wc-loading');
+    } catch (e) {
+        return null;
+    }
+}
 
+const main = () => {
     let interval = setInterval(() => {
-        let loadingZoom;
-        if(window !== window.top) {
-            loadingZoom = window.top.document.getElementById('wc-loading');
-        } else {
-            loadingZoom = document.getElementById('wc-loading');
+        let loadingZoom = findWcLoading(document);
+        if (!loadingZoom) {
+            const iframes = document.getElementsByTagName('iframe');
+            for (let iframe of iframes) {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const found = findWcLoading(iframeDoc);
+                    if (found) {
+                        loadingZoom = found;
+                        break;
+                    }
+                } catch (e) {
+                    console.error('error when trying to access iframe:', e);
+                }
+            }
         }
 
-        if(!loadingZoom || !loadingZoom.style.display) {
+        if (!loadingZoom || !loadingZoom.style || !loadingZoom.style.display) {
             return;
         }
+
         clearInterval(interval);
         openSidebarParticipants(checkParticipants);
     });

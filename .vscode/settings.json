@@ -7,7 +7,7 @@
         "configFile": ".eslintrc.json"
     },
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": "explicit"
     },
     "eslint.alwaysShowStatus": true
 }
