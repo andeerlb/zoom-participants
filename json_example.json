@@ -1,0 +1,10 @@
+[
+    {
+        "responsible": "Anderson",
+        "people": ["Gustavo", "Manoel"]
+    },
+    {
+        "responsible": "Lucas",
+        "people": ["Pedro", "Gustavo Antonio"]
+    }
+]
