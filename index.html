@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Participants</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="mainwrapper">
+        <nav class="navbar">
+            <button id="home-btn">Main</button>
+            <button id="config-btn">Settings</button>
+            <button id="reload-action">
+                <img src="reload.svg" alt="Menu" width="24" height="24">
+            </button>
+        </nav>
+
+        <div id="home-page" class="page active">
+            <div id="refreshRequired" class="notifications hide">Your settings have been updated, you need to click
+                update.</div>
+            <div id="accordionContainer"></div>
+        </div>
+
+        <div id="config-page" class="page">
+            <div id="configcontainer">
+                <h1>JSON Configuration</h1>
+                <p>Enter the JSON content below that will be used by the extension.</p>
+                <textarea id="jsonInput" placeholder='
+[
+    {
+        "responsible": "Rickson",
+        "people": [
+            "Anderson",
+            "Guilherme"
+        ]
+    }
+]
+'></textarea>
+                <p style="margin: 10px 0px;">Or enter the URL of the JSON file</p>
+                <input type="text" id="jsonUrl" placeholder="JSON URL" />
+                <div class="checkbox-container">
+                    <input type="checkbox" id="jsonFileCheckbox" />
+                    <label for="jsonFileCheckbox">Use JSON from URL</label>
+                </div>
+                <div class="buttons">
+                    <button id="saveBtn">Salvar</button>
+                    <button id="resetBtn">Resetar</button>
+                </div>
+                <div id="configStatus" class="notifications hide"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+
+</html>

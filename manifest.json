@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "Check Zoom Participants",
+  "version": "0.0.1",
+  "description": "Should check all participants on meeting",
+  "author": "Anderson Babinski",
+  "action": {
+    "default_title": "Zoom Participants",
+    "default_popup": "index.html",
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://app.zoom.us/*"
+      ],
+      "js": [
+        "zoom_script.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://app.zoom.us/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "data/names.json"
+      ],
+      "matches": [
+        "https://app.zoom.us/*"
+      ]
+    }
+  ]
+}
