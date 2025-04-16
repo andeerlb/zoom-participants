@@ -1,12 +1,7 @@
 var refreshRequired = false;
 
 const saveJsonToStorage = (result) => {
-    chrome.storage.local.set({ json: result }, () => {
-        showStatus("JSON salved with success!", "green");
-        refreshRequired = true;
-        document.getElementById("refreshRequired").classList.remove("hide");
-        document.getElementById('accordionContainer').innerHTML = '';
-    });
+    chrome.storage.local.set({ json: result });
 }
 
 const getStorage = (key, successCallback, errorCallback) => {
@@ -77,7 +72,6 @@ if (chrome) {
                 if (loadingEl) {
                     loadingEl.remove();
                 }
-                console.log(message.data);
                 message.data.forEach(lead => {
                     accordionByLead(lead);
                 })
@@ -179,6 +173,8 @@ const jsonUrlEl = document.getElementById("jsonUrl");
 const getJsonFromUrl = () => {
     textarea.disabled = true;
     let jsonUrl = jsonUrlEl.value;
+    chrome.storage.local.set({ jsonUrl: jsonUrl });
+
     fetch(jsonUrl)
         .then(response => response.json())
         .then(data => {
@@ -195,7 +191,10 @@ document.addEventListener("DOMContentLoaded", () => {
     getStorage("fetchJsonFromUrl", checked => {
         jsonFileCheckbox.checked = checked;
         if (checked) {
-            getJsonFromUrl();
+            getStorage("jsonUrl", jsonUrl => {
+                jsonUrlEl.value = jsonUrl;
+                getJsonFromUrl();
+            });
         } else {
             getStorage("json", json => {
                 if (json) {
@@ -230,6 +229,9 @@ saveBtn.addEventListener("click", () => {
         } else {
             saveJsonToStorage(JSON.parse(textarea.value));
         }
+        refreshRequired = true;
+        showStatus("JSON salved with success!", "green");
+        document.getElementById("refreshRequired").classList.remove("hide");
     } catch (error) {
         showStatus("Invalid Json. Check your format.", "red");
     }
