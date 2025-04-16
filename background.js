@@ -1,7 +1,7 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.origin === "zoom_script") {
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.origin === 'zoom_script') {
     chrome.runtime.sendMessage({
-      origin: "background",
+      origin: 'background',
       action: message.action,
       data: message.data
     });

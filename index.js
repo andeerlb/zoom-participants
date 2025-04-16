@@ -5,7 +5,7 @@ var refreshOnWay = false;
 
 const saveJsonToStorage = (result) => {
     chrome.storage.local.set({ json: result });
-}
+};
 
 const getStorage = (key, successCallback, errorCallback) => {
     chrome.storage.local.get([key], (result) => {
@@ -20,7 +20,7 @@ const getStorage = (key, successCallback, errorCallback) => {
             successCallback(result[key]);
         }
     });
-}
+};
 
 const getActiveTab = () => {
     return new Promise((resolve, reject) => {
@@ -28,54 +28,52 @@ const getActiveTab = () => {
             if (tabs.length > 0) {
                 resolve(tabs[0]);
             } else {
-                reject("no active tab");
+                reject('no active tab');
             }
         });
     });
-}
+};
 
 const checkZoom = async () => {
     try {
         const tab = await getActiveTab();
-        if (!tab.url.includes("zoom.us")) {
-            document.getElementById("mainwrapper").remove();
-            const warningDiv = document.createElement("div");
-            warningDiv.id = "mainwrapper";
-            warningDiv.innerHTML = "<p style='padding: 20px'>This extension only works on Zoom pages.</p>";
+        if (!tab.url.includes('zoom.us')) {
+            document.getElementById('mainwrapper').remove();
+            const warningDiv = document.createElement('div');
+            warningDiv.id = 'mainwrapper';
+            warningDiv.innerHTML = '<p style=\'padding: 20px\'>This extension only works on Zoom pages.</p>';
             document.body.appendChild(warningDiv);
-            throw new Error("Extension quit: Page is not from Zoom");
+            throw new Error('Extension quit: Page is not from Zoom');
         }
     } catch (error) {
-        console.error("Erro:", error);
+        console.error('Erro:', error);
     }
-}
+};
 
 checkZoom();
 
 const withoutPeople = () => {
-    document.getElementById('accordionContainer').innerHTML = "<p id='loading'>Loading...</p>";
-}
+    document.getElementById('accordionContainer').innerHTML = '<p id=\'loading\'>Loading...</p>';
+};
 
 withoutPeople();
 
 const forceCheck = () => {
-    document.getElementById("refreshRequired").classList.add("hide");
+    document.getElementById('refreshRequired').classList.add('hide');
     withoutPeople();
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, { action: "forceCheck" });
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'forceCheck' });
     });
-}
+};
 
 let intervalFirstLoad = setInterval(() => {
     if (!chrome || !chrome.runtime || !chrome.tabs) {
         return;
     }
 
-    console.log("aqui")
-
     clearInterval(intervalFirstLoad);
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        if (message.origin === "background" && message.action === "participants") {
+    chrome.runtime.onMessage.addListener((message) => {
+        if (message.origin === 'background' && message.action === 'participants') {
             refreshRequired = false;
             refreshOnWay = false;
             if (message.data) {
@@ -91,8 +89,8 @@ let intervalFirstLoad = setInterval(() => {
             }
         }
 
-        if (message.origin === "background" && message.action === "no_json_config") {
-            document.getElementById('accordionContainer').innerHTML = "<p class='notifications'>You need to configure json, go to the settings page.</p>";
+        if (message.origin === 'background' && message.action === 'no_json_config') {
+            document.getElementById('accordionContainer').innerHTML = '<p class=\'notifications\'>You need to configure json, go to the settings page.</p>';
         }
     });
 
@@ -102,18 +100,18 @@ let intervalFirstLoad = setInterval(() => {
 const showPage = (pageId) => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
-}
+};
 
-document.getElementById("home-btn").addEventListener("click", () => {
-    showPage("home-page");
+document.getElementById('home-btn').addEventListener('click', () => {
+    showPage('home-page');
 });
 
-document.getElementById("config-btn").addEventListener("click", () => {
-    showPage("config-page");
+document.getElementById('config-btn').addEventListener('click', () => {
+    showPage('config-page');
 });
 
-document.getElementById("reload-action").addEventListener("click", () => {
-    showPage("home-page");
+document.getElementById('reload-action').addEventListener('click', () => {
+    showPage('home-page');
     if(!refreshOnWay) {
         refreshOnWay = true;
         forceCheck();   
@@ -167,23 +165,23 @@ const accordionByLead = (accordionContainer, leadData) => {
         accordion.classList.toggle('active');
 
         if (panel.classList.contains('active')) {
-            accordion.style.borderBottomRightRadius = "0px";
-            accordion.style.borderBottomLeftRadius = "0px";
-            accordion.style.marginBottom = "-5px";
+            accordion.style.borderBottomRightRadius = '0px';
+            accordion.style.borderBottomLeftRadius = '0px';
+            accordion.style.marginBottom = '-5px';
         } else {
-            accordion.style.borderBottomRightRadius = "8px";
-            accordion.style.borderBottomLeftRadius = "8px";
-            accordion.style.marginBottom = "0px";
+            accordion.style.borderBottomRightRadius = '8px';
+            accordion.style.borderBottomLeftRadius = '8px';
+            accordion.style.marginBottom = '0px';
         }
     });
-}
+};
 
-const textarea = document.getElementById("jsonInput");
-const saveBtn = document.getElementById("saveBtn");
-const resetBtn = document.getElementById("resetBtn");
-const statusDiv = document.getElementById("configStatus");
+const textarea = document.getElementById('jsonInput');
+const saveBtn = document.getElementById('saveBtn');
+const resetBtn = document.getElementById('resetBtn');
+const statusDiv = document.getElementById('configStatus');
 const jsonFileCheckbox = document.getElementById('jsonFileCheckbox');
-const jsonUrlEl = document.getElementById("jsonUrl");
+const jsonUrlEl = document.getElementById('jsonUrl');
 
 const getJsonFromUrl = () => {
     textarea.disabled = true;
@@ -198,38 +196,38 @@ const getJsonFromUrl = () => {
         })
         .catch(error => {
             console.error('Error fetching JSON:', error);
-            showStatus("Error fetching JSON.", "red");
+            showStatus('Error fetching JSON.', 'red');
         });
-}
+};
 
 const removeLocalStorage = (key, callback) => {
     chrome.storage.local.remove([key], () => {
         callback();
     });
-}
+};
 
-document.addEventListener("DOMContentLoaded", () => {
-    getStorage("fetchJsonFromUrl", checked => {
+document.addEventListener('DOMContentLoaded', () => {
+    getStorage('fetchJsonFromUrl', checked => {
         jsonFileCheckbox.checked = checked;
         if (checked) {
-            getStorage("jsonUrl", jsonUrl => {
+            getStorage('jsonUrl', jsonUrl => {
                 jsonUrlEl.value = jsonUrl;
                 getJsonFromUrl();
             });
         } else {
-            getStorage("json", json => {
+            getStorage('json', json => {
                 if (json) {
                     textarea.value = JSON.stringify(json, null, 2);
                 }
-            })
+            });
         }
     }, () => {
-        getStorage("json", json => {
+        getStorage('json', json => {
             if (json) {
                 textarea.value = JSON.stringify(json, null, 2);
             }
-        })
-    })
+        });
+    });
 
     jsonFileCheckbox.addEventListener('change', (event) => {
         if (event.target.checked) {
@@ -242,35 +240,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-saveBtn.addEventListener("click", () => {
+saveBtn.addEventListener('click', () => {
     try {
-        let fetchJsonFromUrl = document.getElementById("jsonFileCheckbox").checked;
+        let fetchJsonFromUrl = document.getElementById('jsonFileCheckbox').checked;
         if (fetchJsonFromUrl) {
             getJsonFromUrl();
         } else {
             saveJsonToStorage(JSON.parse(textarea.value));
         }
         refreshRequired = true;
-        showStatus("JSON salved with success!", "green");
-        document.getElementById("refreshRequired").classList.remove("hide");
+        showStatus('JSON salved with success!', 'green');
+        document.getElementById('refreshRequired').classList.remove('hide');
     } catch (error) {
-        showStatus("Invalid Json. Check your format.", "red");
+        showStatus('Invalid Json. Check your format.', 'red');
     }
 });
 
-resetBtn.addEventListener("click", () => {
-    removeLocalStorage("json", () => {
-        textarea.value = "";
-        showStatus("JSON removed.", "gray");
+resetBtn.addEventListener('click', () => {
+    removeLocalStorage('json', () => {
+        textarea.value = '';
+        showStatus('JSON removed.', 'gray');
     });
 });
 
 const showStatus = (message, color) => {
     statusDiv.textContent = message;
     statusDiv.style.color = color;
-    statusDiv.classList.remove("hide");
+    statusDiv.classList.remove('hide');
     setTimeout(() => {
-        statusDiv.textContent = "";
-        statusDiv.classList.add("hide");
+        statusDiv.textContent = '';
+        statusDiv.classList.add('hide');
     }, 3000);
-}
+};

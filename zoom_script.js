@@ -1,11 +1,6 @@
 
 'use strict';
 
-const getCurrentTime = () => {
-    const now = new Date();
-    return now.toLocaleTimeString("en-US", { hour12: false });
-}
-
 // Scroll and collect visible names
 const collectAllVisibleParticipants = (sidebarParticipants) => {
     return new Promise(resolve => {
@@ -15,7 +10,7 @@ const collectAllVisibleParticipants = (sidebarParticipants) => {
         const collected = new Set();
 
         function scrollAndCollect() {
-            const elements = document.querySelectorAll("span.participants-item__display-name");
+            const elements = document.querySelectorAll('span.participants-item__display-name');
             elements.forEach(el => collected.add(el.innerText.trim()));
 
             if (sidebarParticipants.scrollTop + sidebarParticipants.clientHeight >= sidebarParticipants.scrollHeight - 10) {
@@ -32,11 +27,11 @@ const collectAllVisibleParticipants = (sidebarParticipants) => {
         sidebarParticipants.scrollTop = 0;
         setTimeout(scrollAndCollect, delay);
     });
-}
+};
 
 function getStorageSync() {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.get(["json"], (result) => {
+        chrome.storage.local.get(['json'], (result) => {
             if (chrome.runtime.lastError) {
                 reject(chrome.runtime.lastError);
             } else {
@@ -52,8 +47,8 @@ const loadConfig = async () => {
 
         if(!config) {
             chrome.runtime.sendMessage({
-                origin: "zoom_script",
-                action: "no_json_config"
+                origin: 'zoom_script',
+                action: 'no_json_config'
             });
             return [];
         }
@@ -61,8 +56,8 @@ const loadConfig = async () => {
         return config;
     } catch (error) {
         chrome.runtime.sendMessage({
-            origin: "zoom_script",
-            action: "no_json_config"
+            origin: 'zoom_script',
+            action: 'no_json_config'
         });
         console.error('error fetch json', error);
     }
@@ -84,7 +79,7 @@ const checkParticipants = async (sidebarParticipants) => {
             responsible: data.responsible,
             online,
             offline
-        }
+        };
     });
 
     let unknownLeadArray = [];
@@ -99,27 +94,27 @@ const checkParticipants = async (sidebarParticipants) => {
         if(!found) {
             unknownLeadArray.push(name);   
         }
-    })
+    });
 
     if (unknownLeadArray.length) {
         newModel.push({
-            responsible: "unknown",
+            responsible: 'unknown',
             online: unknownLeadArray,
             offline: []
         });
     }
 
     chrome.runtime.sendMessage({
-        origin: "zoom_script",
-        action: "participants",
+        origin: 'zoom_script',
+        action: 'participants',
         data: newModel,
     });
-}
+};
 
 const openSidebarParticipants = (callBack) => {
     const participantContainerBtn = document.querySelector('#participant');
     if (participantContainerBtn) {
-        let sidebarParticipants = document.querySelector("#participants-ul");
+        let sidebarParticipants = document.querySelector('#participants-ul');
         if (sidebarParticipants) {
             callBack(sidebarParticipants);
             return;
@@ -128,23 +123,23 @@ const openSidebarParticipants = (callBack) => {
         let button = participantContainerBtn.children[0];
         button.click();
         let interval = setInterval(() => {
-            let sidebarParticipants = document.querySelector("#participants-ul");
+            let sidebarParticipants = document.querySelector('#participants-ul');
             if (sidebarParticipants) {
                 clearInterval(interval);
                 callBack(sidebarParticipants);
             }
-        }, 1000)
+        }, 1000);
     }
-}
+};
 
 const main = () => {
 
     let interval = setInterval(() => {
         let loadingZoom;
         if(window !== window.top) {
-            loadingZoom = window.top.document.getElementById("wc-loading");
+            loadingZoom = window.top.document.getElementById('wc-loading');
         } else {
-            loadingZoom = document.getElementById("wc-loading");
+            loadingZoom = document.getElementById('wc-loading');
         }
 
         if(!loadingZoom || !loadingZoom.style.display) {
@@ -153,10 +148,10 @@ const main = () => {
         clearInterval(interval);
         openSidebarParticipants(checkParticipants);
     });
-}
+};
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.action === "forceCheck") {
+chrome.runtime.onMessage.addListener((message) => {
+    if (message.action === 'forceCheck') {
         main();
     }
 });
