@@ -88,7 +88,7 @@ const checkParticipants = async (sidebarParticipants) => {
     currentVisibleNames.forEach(name => {
         let found = false;
         for (let i = 0; i < dataConfig.length; i++) {
-            if(dataConfig[i].people.includes(name)) {
+            if(dataConfig[i].responsible.includes(name) || dataConfig[i].people.includes(name)) {
                 found = true;
                 break;
             }
