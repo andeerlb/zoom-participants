@@ -1,4 +1,7 @@
+'use strict';
+
 var refreshRequired = false;
+var refreshOnWay = false;
 
 const saveJsonToStorage = (result) => {
     chrome.storage.local.set({ json: result });
@@ -56,7 +59,6 @@ const withoutPeople = () => {
 withoutPeople();
 
 const forceCheck = () => {
-    refreshRequired = false;
     document.getElementById("refreshRequired").classList.add("hide");
     withoutPeople();
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -64,17 +66,28 @@ const forceCheck = () => {
     });
 }
 
-if (chrome) {
+let intervalFirstLoad = setInterval(() => {
+    if (!chrome || !chrome.runtime || !chrome.tabs) {
+        return;
+    }
+
+    console.log("aqui")
+
+    clearInterval(intervalFirstLoad);
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         if (message.origin === "background" && message.action === "participants") {
+            refreshRequired = false;
+            refreshOnWay = false;
             if (message.data) {
                 let loadingEl = document.getElementById('loading');
                 if (loadingEl) {
                     loadingEl.remove();
                 }
+
+                const accordionContainer = document.getElementById('accordionContainer');
                 message.data.forEach(lead => {
-                    accordionByLead(lead);
-                })
+                    accordionByLead(accordionContainer, lead);
+                });
             }
         }
 
@@ -84,7 +97,7 @@ if (chrome) {
     });
 
     forceCheck();
-}
+}, 1000);
 
 const showPage = (pageId) => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -101,11 +114,13 @@ document.getElementById("config-btn").addEventListener("click", () => {
 
 document.getElementById("reload-action").addEventListener("click", () => {
     showPage("home-page");
-    forceCheck();
+    if(!refreshOnWay) {
+        refreshOnWay = true;
+        forceCheck();   
+    }
 });
 
-const accordionContainer = document.getElementById('accordionContainer');
-const accordionByLead = (leadData) => {
+const accordionByLead = (accordionContainer, leadData) => {
     const accordion = document.createElement('button');
     accordion.classList.add('accordion');
     accordion.textContent = leadData.responsible + ` (on: ${leadData.online.length} / off: ${leadData.offline.length})`;
@@ -187,6 +202,12 @@ const getJsonFromUrl = () => {
         });
 }
 
+const removeLocalStorage = (key, callback) => {
+    chrome.storage.local.remove([key], () => {
+        callback();
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     getStorage("fetchJsonFromUrl", checked => {
         jsonFileCheckbox.checked = checked;
@@ -238,7 +259,7 @@ saveBtn.addEventListener("click", () => {
 });
 
 resetBtn.addEventListener("click", () => {
-    chrome.storage.local.remove(["json"], () => {
+    removeLocalStorage("json", () => {
         textarea.value = "";
         showStatus("JSON removed.", "gray");
     });

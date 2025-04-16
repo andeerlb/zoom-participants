@@ -1,4 +1,6 @@
 
+'use strict';
+
 const getCurrentTime = () => {
     const now = new Date();
     return now.toLocaleTimeString("en-US", { hour12: false });
@@ -115,37 +117,42 @@ const checkParticipants = async (sidebarParticipants) => {
 }
 
 const openSidebarParticipants = (callBack) => {
-    let interval = setInterval(() => {
-        let loadingZoom = document.getElementById("wc-loading");
-        if(loadingZoom && !loadingZoom.style.display) {
+    const participantContainerBtn = document.querySelector('#participant');
+    if (participantContainerBtn) {
+        let sidebarParticipants = document.querySelector("#participants-ul");
+        if (sidebarParticipants) {
+            callBack(sidebarParticipants);
             return;
         }
 
-        const participantContainerBtn = document.querySelector('#participant');
-        if (participantContainerBtn) {
+        let button = participantContainerBtn.children[0];
+        button.click();
+        let interval = setInterval(() => {
             let sidebarParticipants = document.querySelector("#participants-ul");
-            clearInterval(interval);
-
             if (sidebarParticipants) {
+                clearInterval(interval);
                 callBack(sidebarParticipants);
-                return;
             }
-
-            let button = participantContainerBtn.children[0];
-            button.click();
-            interval = setInterval(() => {
-                let sidebarParticipants = document.querySelector("#participants-ul");
-                if (sidebarParticipants) {
-                    clearInterval(interval);
-                    callBack(sidebarParticipants);
-                }
-            }, 1000)
-        }
-    }, 1000);
+        }, 1000)
+    }
 }
 
 const main = () => {
-    openSidebarParticipants(checkParticipants);
+
+    let interval = setInterval(() => {
+        let loadingZoom;
+        if(window !== window.top) {
+            loadingZoom = window.top.document.getElementById("wc-loading");
+        } else {
+            loadingZoom = document.getElementById("wc-loading");
+        }
+
+        if(!loadingZoom || !loadingZoom.style.display) {
+            return;
+        }
+        clearInterval(interval);
+        openSidebarParticipants(checkParticipants);
+    });
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
