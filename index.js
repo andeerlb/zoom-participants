@@ -95,6 +95,7 @@ let intervalFirstLoad = setInterval(() => {
         }
 
         if (message.origin === 'background' && message.action === 'no_json_config') {
+            refreshOnWay = false;
             document.getElementById('accordionContainer').innerHTML = '<p class=\'notifications\'>You need to configure json, go to the settings page.</p>';
         }
     });
