@@ -6,7 +6,7 @@ This is a browser extension that checks which participants are present in a Zoom
 
 The extension reads a JSON containing participant names and their assigned responsible persons. Once activated during a Zoom meeting, it checks who is present and displays:
 
-- The list of participants grouped by their responsible.
+- The list of participants grouped by their responsible and will show who is online and offline..
 - Participants in the meeting who are not assigned to any responsible.
 
 ## Installation
