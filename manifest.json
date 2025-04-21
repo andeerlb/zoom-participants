@@ -6,7 +6,7 @@
   "author": "Anderson Babinski",
   "action": {
     "default_title": "Zoom Participants",
-    "default_popup": "index.html",
+    "default_popup": "app/index.html",
     "default_icon": "icon.png"
   },
   "content_scripts": [
@@ -15,7 +15,7 @@
         "https://app.zoom.us/*"
       ],
       "js": [
-        "zoom_script.js"
+        "js/zoom_script.js"
       ],
       "run_at": "document_idle",
       "all_frames": true
@@ -29,13 +29,10 @@
     "https://app.zoom.us/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "js/background.js"
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "data/names.json"
-      ],
       "matches": [
         "https://app.zoom.us/*"
       ]

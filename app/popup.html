@@ -23,16 +23,17 @@
                 <button id="home-btn">Main</button>
                 <button id="config-btn">Settings</button>
                 <button id="reload-action">
-                    <img src="reload.svg" alt="Menu" width="24" height="24">
+                    <img src="../assets/reload.svg" alt="Menu" width="24" height="24">
                 </button>
             </div>
             <button id="search-action">
-                <img src="search.svg" alt="Menu" width="24" height="24">
+                <img src="../assets/search.svg" alt="Menu" width="24" height="24">
             </button>
         </nav>
 
         <div id="home-page" class="page active">
-            <div id="refreshRequired" class="notifications hide">Your settings have been updated, you need to refresh.</div>
+            <div id="refreshRequired" class="notifications hide">Your settings have been updated, you need to refresh.
+            </div>
             <div id="accordionContainer"></div>
         </div>
 
@@ -43,7 +44,7 @@
                 <textarea id="jsonInput" placeholder='
 [
     {
-        "responsible": "Rickson",
+        "groupedBy": "Rickson",
         "people": [
             "Anderson",
             "Guilherme"
@@ -58,15 +59,19 @@
                     <label for="jsonFileCheckbox">Use JSON from URL</label>
                 </div>
                 <div class="buttons">
-                    <button id="saveBtn">Salvar</button>
-                    <button id="resetBtn">Resetar</button>
+                    <button id="saveBtn">Save</button>
+                    <button id="resetBtn">Reset</button>
                 </div>
                 <div id="configStatus" class="notifications hide"></div>
             </div>
         </div>
     </div>
-
-    <script src="index.js"></script>
+    <script type="module" src="js/popup/utils.js"></script>
+    <script type="module" src="js/popup/index.js"></script>
+    <script type="module" src="js/popup/modal.js"></script>
+    <script type="module" src="js/popup/navbar.js"></script>
+    <script type="module" src="js/popup/home-page.js"></script>
+    <script type="module" src="js/popup/settings-page.js"></script>
 </body>
 
 </html>
