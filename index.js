@@ -315,3 +315,30 @@ const showStatus = (message, color) => {
         statusDiv.classList.add('hide');
     }, 3000);
 };
+
+// modal
+let modalEl = document.querySelector('.modal');
+
+document.querySelector('#search-action').addEventListener('click', function () {
+    openModal();
+});
+
+document.querySelector('.close-modal').addEventListener('click', function () {
+    closeModal();
+});
+
+document.querySelector('#modal').addEventListener('click', function () {
+    closeModal();
+});
+
+document.querySelector('.modal-content').addEventListener('click', function (event) {
+    event.stopPropagation();
+});
+
+const openModal = () => {
+    modalEl.classList.remove('hide');
+}
+
+const closeModal = () => {
+    modalEl.classList.add('hide');
+}

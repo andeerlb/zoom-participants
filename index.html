@@ -10,11 +10,24 @@
 
 <body>
     <div id="mainwrapper">
+        <div id="modal" class="modal hide">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Zoom Participants</h2>
+                <p>Click on the button below to start the Zoom meeting.</p>
+                <button id="start-meeting-btn">Start Meeting</button>
+            </div>
+        </div>
         <nav class="navbar">
-            <button id="home-btn">Main</button>
-            <button id="config-btn">Settings</button>
-            <button id="reload-action">
-                <img src="reload.svg" alt="Menu" width="24" height="24">
+            <div>
+                <button id="home-btn">Main</button>
+                <button id="config-btn">Settings</button>
+                <button id="reload-action">
+                    <img src="reload.svg" alt="Menu" width="24" height="24">
+                </button>
+            </div>
+            <button id="search-action">
+                <img src="search.svg" alt="Menu" width="24" height="24">
             </button>
         </nav>
 
