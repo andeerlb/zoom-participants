@@ -77,9 +77,9 @@ const checkParticipants = async (sidebarParticipants) => {
     let newModel = dataConfig.map(data => {
         const online = data.people.filter(name => currentVisibleNames.has(name));
         const offline = data.people.filter(name => !currentVisibleNames.has(name));
-        const responsibleOnline = currentVisibleNames.has(data.responsible);
+        const responsibleOnline = currentVisibleNames.has(data.groupedBy);
         return {
-            groupedBy: data.responsible,
+            groupedBy: data.groupedBy,
             responsibleOnline,
             online,
             offline
@@ -90,7 +90,7 @@ const checkParticipants = async (sidebarParticipants) => {
     currentVisibleNames.forEach(name => {
         let found = false;
         for (let i = 0; i < dataConfig.length; i++) {
-            if (dataConfig[i].responsible.includes(name) || dataConfig[i].people.includes(name)) {
+            if (dataConfig[i].groupedBy.includes(name) || dataConfig[i].people.includes(name)) {
                 found = true;
                 break;
             }

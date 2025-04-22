@@ -7,11 +7,16 @@ body {
 
 #mainwrapper {
   width: 400px;
+  min-height: 200px;
   position: relative;
 }
 
 .hide {
   display: none !important;
+}
+
+#loading {
+  text-align: center;
 }
 
 #refreshRequired {

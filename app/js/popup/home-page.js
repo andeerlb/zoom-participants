@@ -12,7 +12,7 @@ const summary = (accordionContainer, data) => {
 
     data.forEach(item => {
 
-        if (item.responsible === 'unknown') {
+        if (item.groupedBy === 'unknown') {
             unknownOnlineCount += item.online.length;
         } else {
             onlineCount += item.online.length;
@@ -35,10 +35,11 @@ const summary = (accordionContainer, data) => {
 }
 
 const accordionByGroup = (accordionContainer, groupData) => {
+    console.log(groupData);
     const accordion = document.createElement('button');
     accordion.classList.add('accordion');
-    accordion.textContent = `${groupData.responsible} (on: ${groupData.online.length} / off: ${groupData.offline.length})`;
-    if(groupData.responsible !== "unknown") {
+    accordion.textContent = `${groupData.groupedBy} (on: ${groupData.online.length} / off: ${groupData.offline.length})`;
+    if(groupData.groupedBy !== "unknown") {
         accordion.classList.add(groupData.responsibleOnline ? 'online' : 'offline');
     }
 
