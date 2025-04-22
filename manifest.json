@@ -15,7 +15,7 @@
         "https://app.zoom.us/*"
       ],
       "js": [
-        "app/js/zoom_script.js"
+        "app/js/zoom-script.js"
       ],
       "run_at": "document_idle",
       "all_frames": true
