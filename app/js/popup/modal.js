@@ -1,10 +1,10 @@
 'use strict';
-import { openModal, closeModal } from './utils.js';
+import { closeModal } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('#search-action').addEventListener('click', function () {
-        openModal();
-    });
+    // document.querySelector('#search-action').addEventListener('click', function () {
+    //     openModal();
+    // });
     
     document.querySelector('.close-modal').addEventListener('click', function () {
         closeModal();

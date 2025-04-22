@@ -1,5 +1,5 @@
 'use strict';
-import { state  } from './index.js';
+import { state } from "./state.js";
 import { refreshList } from './utils.js';
 
 const showPage = (pageId) => {

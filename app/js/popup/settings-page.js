@@ -1,5 +1,5 @@
 import { removeStorage, saveToStorage, getJsonFromUrl } from './utils.js';
-import { state } from './index.js';
+import { state } from "./state.js";
 
 const showStatus = (message, color, statusDiv) => {
     statusDiv.textContent = message;
