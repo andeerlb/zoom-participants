@@ -79,7 +79,7 @@ const checkParticipants = async (sidebarParticipants) => {
         const offline = data.people.filter(name => !currentVisibleNames.has(name));
         const responsibleOnline = currentVisibleNames.has(data.responsible);
         return {
-            responsible: data.responsible,
+            groupedBy: data.responsible,
             responsibleOnline,
             online,
             offline
@@ -102,7 +102,7 @@ const checkParticipants = async (sidebarParticipants) => {
 
     if (unknownLeadArray.length) {
         newModel.push({
-            responsible: 'unknown',
+            groupedBy: 'unknown',
             online: unknownLeadArray,
             offline: []
         });
