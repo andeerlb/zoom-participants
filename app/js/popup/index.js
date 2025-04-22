@@ -1,4 +1,5 @@
 'use strict';
+import '../../style.css';
 import { checkZoom, withoutPeople, getStorage, refreshList, getJsonFromUrl } from "./utils.js";
 import { createListener } from "./home-page.js";
 

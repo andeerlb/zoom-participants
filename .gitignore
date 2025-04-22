@@ -1,0 +1,30 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Webpack output
+dist/
+
+# VSCode
+.vscode/
+
+# dotenv files (se usados)
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+
+# MacOS
+.DS_Store
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+ehthumbs.db
