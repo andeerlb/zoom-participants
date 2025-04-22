@@ -119,9 +119,9 @@ const openSidebarParticipants = (callBack) => {
         if (!participantContainerBtn) {
             let svg = document.querySelector('.SvgParticipants');
 
-            if(!svg) {
+            if (!svg) {
                 let moreBtn = document.querySelector("#moreButton");
-                if(!moreBtn) {
+                if (!moreBtn) {
                     return;
                 }
                 moreBtn.querySelector("button").click();
