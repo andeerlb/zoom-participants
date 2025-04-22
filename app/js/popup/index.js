@@ -1,20 +1,26 @@
 'use strict';
-import { checkZoom, withoutPeople, getStorage, refreshList } from "./utils.js";
+import { checkZoom, withoutPeople, getStorage, refreshList, getJsonFromUrl } from "./utils.js";
 import { createListener } from "./home-page.js";
 
-export let refreshRequired = false;
-export let refreshOnWay = false;
+export const state = {
+    refreshRequired: false,
+    refreshOnWay: false
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     checkZoom();
     withoutPeople();
+    const textarea = document.getElementById('jsonInput');
+    const jsonFileCheckbox = document.getElementById('jsonFileCheckbox');
+    const jsonUrlEl = document.getElementById('jsonUrl');
+    const statusDiv = document.getElementById('configStatus');
 
     getStorage('fetchJsonFromUrl', checked => {
         jsonFileCheckbox.checked = checked;
         if (checked) {
             getStorage('jsonUrl', jsonUrl => {
                 jsonUrlEl.value = jsonUrl;
-                getJsonFromUrl();
+                getJsonFromUrl(textarea, jsonUrlEl, statusDiv);
             });
         } else {
             getStorage('json', json => {

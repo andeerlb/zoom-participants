@@ -171,7 +171,7 @@ const main = () => {
 };
 
 chrome.runtime.onMessage.addListener((message) => {
-    if (message.action === 'forceCheck') {
+    if (message.action === 'refresh') {
         main();
     }
 });

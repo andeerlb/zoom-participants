@@ -1,5 +1,5 @@
-
-import { refreshOnWay, refreshRequired } from "./index.js"
+'use strict';
+import { state } from "./index.js"
 
 const summary = (accordionContainer, data) => {
     const homePageContainer = document.getElementById('home-page');
@@ -99,8 +99,8 @@ const accordionByGroup = (accordionContainer, groupData) => {
 export const createListener = () => {
     chrome.runtime.onMessage.addListener(message => {
         if (message.origin === 'background' && message.action === 'participants') {
-            refreshRequired = false;
-            refreshOnWay = false;
+            state.refreshRequired = false;
+            state.refreshOnWay = false;
             if (message.data) {
                 let loadingEl = document.getElementById('loading');
                 if (loadingEl) {
@@ -116,7 +116,7 @@ export const createListener = () => {
         }
 
         if (message.origin === 'background' && message.action === 'no_json_config') {
-            refreshOnWay = false;
+            state.refreshOnWay = false;
             document.getElementById('accordionContainer').innerHTML = '<p class=\'notifications\'>You need to configure json, go to the settings page.</p>';
         }
     });

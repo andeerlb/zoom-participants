@@ -1,4 +1,6 @@
-import { refreshOnWay  } from "./index.js";
+'use strict';
+import { state  } from "./index.js";
+import { refreshList } from "./utils.js";
 
 const showPage = (pageId) => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -16,9 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     document.getElementById('reload-action').addEventListener('click', () => {
         showPage('home-page');
-        if (!refreshOnWay) {
-            refreshOnWay = true;
-            forceCheck();
-        }
+        refreshList();
+        // if (!state.refreshOnWay) {
+        //     state.refreshOnWay = true;
+        //     refreshList();
+        // }
     });
 });

@@ -1,4 +1,5 @@
-import { removeStorage, saveToStorage } from "./utils.js"
+import { removeStorage, saveToStorage, getJsonFromUrl } from "./utils.js"
+import { state } from "./index.js"
 
 const showStatus = (message, color, statusDiv) => {
     statusDiv.textContent = message;
@@ -8,23 +9,6 @@ const showStatus = (message, color, statusDiv) => {
         statusDiv.textContent = '';
         statusDiv.classList.add('hide');
     }, 3000);
-};
-
-const getJsonFromUrl = (textarea, jsonUrlEl, statusDiv) => {
-    textarea.disabled = true;
-    let jsonUrl = jsonUrlEl.value;
-    chrome.storage.local.set({ jsonUrl: jsonUrl });
-
-    fetch(jsonUrl)
-        .then(response => response.json())
-        .then(data => {
-            saveToStorage(data);
-            textarea.value = JSON.stringify(data, null, 2);
-        })
-        .catch(error => {
-            console.error('Error fetching JSON:', error);
-            showStatus('Error fetching JSON.', 'red', statusDiv);
-        });
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -41,13 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (fetchJsonFromUrl) {
                 getJsonFromUrl(textarea, jsonUrlEl, statusDiv);
             } else {
-                saveToStorage(JSON.parse(textarea.value));
+                saveToStorage("json", JSON.parse(textarea.value));
             }
-            refreshRequired = true;
-            showStatus('JSON saved with success!', 'green');
+            state.refreshRequired = true;
+            showStatus('JSON saved with success!', 'green', statusDiv);
             document.getElementById('refreshRequired').classList.remove('hide');
         } catch (error) {
-            showStatus('Invalid Json. Check your format.', 'red');
+            console.error(error);
+            showStatus('Invalid Json. Check your format.', 'red', statusDiv);
         }
     });
     

@@ -60,7 +60,7 @@ export const refreshList = () => {
     }
     withoutPeople();
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, { action: 'forceCheck' });
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'refresh' });
     });
 };
 
@@ -83,3 +83,20 @@ export const closeModal = () => {
     let modalEl = document.querySelector('.modal');
     modalEl.classList.add('hide');
 }
+
+export const getJsonFromUrl = (textarea, jsonUrlEl, statusDiv) => {
+    textarea.disabled = true;
+    let jsonUrl = jsonUrlEl.value;
+    chrome.storage.local.set({ jsonUrl: jsonUrl });
+
+    fetch(jsonUrl)
+        .then(response => response.json())
+        .then(data => {
+            saveToStorage("json", data);
+            textarea.value = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+            console.error('Error fetching JSON:', error);
+            showStatus('Error fetching JSON.', 'red', statusDiv);
+        });
+};
