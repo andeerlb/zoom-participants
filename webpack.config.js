@@ -46,9 +46,15 @@ module.exports = {
         ],
     },
     devServer: {
-        contentBase: path.join(__dirname, 'dist'),
+        static: {
+            directory: path.join(__dirname, 'dist'),
+        },
         compress: true,
         port: 9000,
+        open: {
+            target: '/popup.html',
+        },
+        historyApiFallback: true
     },
     stats: {
         warnings: false,
@@ -87,6 +93,8 @@ module.exports = {
                         manifestJson.background.service_worker = `js/${assetName}`;
                     }                    
                 });
+
+                manifestJson.action.default_popup = "popup.html";
                 return manifestJson;
             },
         })
