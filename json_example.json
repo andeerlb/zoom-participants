@@ -1,10 +1,10 @@
 [
     {
-        "responsible": "Anderson",
+        "groupedBy": "Anderson",
         "people": ["Gustavo", "Manoel"]
     },
     {
-        "responsible": "Lucas",
+        "groupedBy": "Lucas",
         "people": ["Pedro", "Gustavo Antonio"]
     }
 ]

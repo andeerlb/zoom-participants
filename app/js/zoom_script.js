@@ -1,6 +1,8 @@
 
 'use strict';
 
+const INTERLVAL_MS = 1000;
+
 // Scroll and collect visible names
 const collectAllVisibleParticipants = (sidebarParticipants) => {
     return new Promise(resolve => {
@@ -116,6 +118,14 @@ const checkParticipants = async (sidebarParticipants) => {
 const openSidebarParticipants = (callBack) => {
     let intervalClick = setInterval(() => {
         const participantContainerBtn = document.querySelector('#participant');
+        let sidebarParticipants = document.querySelector('#participants-ul');
+
+        if (sidebarParticipants) {
+            clearInterval(intervalClick);
+            callBack(sidebarParticipants);
+            return;
+        }
+
         if (!participantContainerBtn) {
             let svg = document.querySelector('.SvgParticipants');
 
@@ -126,30 +136,35 @@ const openSidebarParticipants = (callBack) => {
                 }
                 moreBtn.querySelector("button").click();
                 svg = document.querySelector('.SvgParticipants');
+
+                if(!svg) {
+                    return;
+                }
             }
 
-            clearInterval(intervalClick);
-            let mobileVersionBtn = document.querySelector('.SvgParticipants').parentElement.nextElementSibling;
+            let mobileVersionBtn = svg.parentElement.nextElementSibling;
             mobileVersionBtn.click();
+        } else {
+            sidebarParticipants = document.querySelector('#participants-ul');
+            if (sidebarParticipants) {
+                clearInterval(intervalClick);
+                callBack(sidebarParticipants);
+                return;
+            }
+
+            let button = participantContainerBtn.children[0];
+            button.click();
         }
 
         clearInterval(intervalClick);
-        let sidebarParticipants = document.querySelector('#participants-ul');
-        if (sidebarParticipants) {
-            callBack(sidebarParticipants);
-            return;
-        }
-
-        let button = participantContainerBtn.children[0];
-        button.click();
         let intervalParticipants = setInterval(() => {
-            let sidebarParticipants = document.querySelector('#participants-ul');
+            sidebarParticipants = document.querySelector('#participants-ul');
             if (sidebarParticipants) {
-                clearInterval(interval);
-                callBack(intervalParticipants);
+                clearInterval(intervalParticipants);
+                callBack(sidebarParticipants);
             }
-        }, 1000);
-    });
+        }, INTERLVAL_MS);
+    }, INTERLVAL_MS);
 };
 
 const findWcLoading = (doc) => {
@@ -185,7 +200,7 @@ const main = () => {
 
         clearInterval(interval);
         openSidebarParticipants(checkParticipants);
-    });
+    }, INTERLVAL_MS);
 };
 
 chrome.runtime.onMessage.addListener((message) => {
