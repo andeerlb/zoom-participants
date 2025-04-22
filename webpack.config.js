@@ -21,7 +21,7 @@ export default {
     utils: './app/js/popup/utils.js',
     zoomScript: './app/js/zoom-script.js',
     background: './app/js/background.js',
-    background: './app/js/popup/state.js',
+    state: './app/js/popup/state.js',
   },
   output: {
     filename: 'js/[name].[contenthash].js',
