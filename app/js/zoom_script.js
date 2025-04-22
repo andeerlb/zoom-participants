@@ -115,57 +115,55 @@ const checkParticipants = async (sidebarParticipants) => {
     });
 };
 
-const openSidebarParticipants = (callBack) => {
+const openSidebarParticipants = (iframeElement, callBack) => {
     let intervalClick = setInterval(() => {
-        const participantContainerBtn = document.querySelector('#participant');
-        let sidebarParticipants = document.querySelector('#participants-ul');
+        const participantContainerBtn = iframeElement.querySelector('#participant');
+        let sidebarParticipants = iframeElement.querySelector('#participants-ul');
 
         if (sidebarParticipants) {
             clearInterval(intervalClick);
             callBack(sidebarParticipants);
             return;
-        }
-
-        if (!participantContainerBtn) {
-            let svg = document.querySelector('.SvgParticipants');
-
-            if (!svg) {
-                let moreBtn = document.querySelector("#moreButton");
-                if (!moreBtn) {
-                    return;
-                }
-                moreBtn.querySelector("button").click();
-                svg = document.querySelector('.SvgParticipants');
-
-                if(!svg) {
-                    return;
-                }
-            }
-
-            let mobileVersionBtn = svg.parentElement.nextElementSibling;
-            mobileVersionBtn.click();
         } else {
-            sidebarParticipants = document.querySelector('#participants-ul');
-            if (sidebarParticipants) {
+            sidebarParticipants = iframeElement.querySelector("#participant-window");
+            if(sidebarParticipants) {
                 clearInterval(intervalClick);
                 callBack(sidebarParticipants);
                 return;
             }
-
-            let button = participantContainerBtn.children[0];
-            button.click();
         }
 
-        clearInterval(intervalClick);
-        let intervalParticipants = setInterval(() => {
-            sidebarParticipants = document.querySelector('#participants-ul');
-            if (sidebarParticipants) {
-                clearInterval(intervalParticipants);
-                callBack(sidebarParticipants);
+        if (!participantContainerBtn) {
+            const svg = iframeElement.querySelector('.SvgParticipants');
+            if (!svg) {
+                const moreBtn = iframeElement.querySelector("#moreButton");
+                if (!moreBtn) return;
+
+                const btn = moreBtn.querySelector("button");
+                if (btn) btn.click();
+                return;
             }
+
+            const mobileVersionBtn = svg.parentElement;
+            if (mobileVersionBtn) mobileVersionBtn.nextElementSibling.click();
+
+            return;
+        }
+
+        const button = participantContainerBtn.children[0];
+        if (button) button.click();
+
+        clearInterval(intervalClick);
+
+        const intervalParticipants = setInterval(() => {
+            const sidebar = iframeElement.querySelector('#participants-ul');
+            if (!sidebar) return;
+
+            clearInterval(intervalParticipants);
+            callBack(sidebar);
         }, INTERLVAL_MS);
     }, INTERLVAL_MS);
-};
+};  
 
 const findWcLoading = (doc) => {
     try {
@@ -176,8 +174,9 @@ const findWcLoading = (doc) => {
 }
 
 const main = () => {
-    let interval = setInterval(() => {
+    let intervalIframe = setInterval(() => {
         let loadingZoom = findWcLoading(document);
+        let iframeElement;
         if (!loadingZoom) {
             const iframes = document.getElementsByTagName('iframe');
             for (let iframe of iframes) {
@@ -186,6 +185,7 @@ const main = () => {
                     const found = findWcLoading(iframeDoc);
                     if (found) {
                         loadingZoom = found;
+                        iframeElement = iframeDoc;
                         break;
                     }
                 } catch (e) {
@@ -194,12 +194,12 @@ const main = () => {
             }
         }
 
-        if (!loadingZoom || !loadingZoom.style || !loadingZoom.style.display) {
+        if (!loadingZoom || !loadingZoom.style || !loadingZoom.style.display || !iframeElement) {
             return;
         }
 
-        clearInterval(interval);
-        openSidebarParticipants(checkParticipants);
+        clearInterval(intervalIframe);
+        openSidebarParticipants(iframeElement, checkParticipants);
     }, INTERLVAL_MS);
 };
 
