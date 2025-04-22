@@ -18,10 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     document.getElementById('reload-action').addEventListener('click', () => {
         showPage('home-page');
-        refreshList();
-        // if (!state.refreshOnWay) {
-        //     state.refreshOnWay = true;
-        //     refreshList();
-        // }
+        if (!state.refreshOnWay) {
+            state.refreshOnWay = true;
+            refreshList();
+        }
     });
 });
