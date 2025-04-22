@@ -114,8 +114,26 @@ const checkParticipants = async (sidebarParticipants) => {
 };
 
 const openSidebarParticipants = (callBack) => {
-    const participantContainerBtn = document.querySelector('#participant');
-    if (participantContainerBtn) {
+    let intervalClick = setInterval(() => {
+        const participantContainerBtn = document.querySelector('#participant');
+        if (!participantContainerBtn) {
+            let svg = document.querySelector('.SvgParticipants');
+
+            if(!svg) {
+                let moreBtn = document.querySelector("#moreButton");
+                if(!moreBtn) {
+                    return;
+                }
+                moreBtn.querySelector("button").click();
+                svg = document.querySelector('.SvgParticipants');
+            }
+
+            clearInterval(intervalClick);
+            let mobileVersionBtn = document.querySelector('.SvgParticipants').parentElement.nextElementSibling;
+            mobileVersionBtn.click();
+        }
+
+        clearInterval(intervalClick);
         let sidebarParticipants = document.querySelector('#participants-ul');
         if (sidebarParticipants) {
             callBack(sidebarParticipants);
@@ -124,14 +142,14 @@ const openSidebarParticipants = (callBack) => {
 
         let button = participantContainerBtn.children[0];
         button.click();
-        let interval = setInterval(() => {
+        let intervalParticipants = setInterval(() => {
             let sidebarParticipants = document.querySelector('#participants-ul');
             if (sidebarParticipants) {
                 clearInterval(interval);
-                callBack(sidebarParticipants);
+                callBack(intervalParticipants);
             }
         }, 1000);
-    }
+    });
 };
 
 const findWcLoading = (doc) => {
