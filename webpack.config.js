@@ -85,16 +85,16 @@ module.exports = {
                     const assetPath = assets[file].path;
                     const assetName = assetPath.replace('/dist/js/', '');
                     
-                    if(assetOriginalFileName === "zoomScript.js") {
+                    if(assetOriginalFileName === 'zoomScript.js') {
                         manifestJson.content_scripts[0].js = [`js/${assetName}`];
                     }
 
-                    if(assetOriginalFileName === "background.js") {
+                    if(assetOriginalFileName === 'background.js') {
                         manifestJson.background.service_worker = `js/${assetName}`;
                     }                    
                 });
 
-                manifestJson.action.default_popup = "popup.html";
+                manifestJson.action.default_popup = 'popup.html';
                 return manifestJson;
             },
         })

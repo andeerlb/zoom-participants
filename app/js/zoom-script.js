@@ -125,7 +125,7 @@ const openSidebarParticipants = (iframeElement, callBack) => {
             callBack(sidebarParticipants);
             return;
         } else {
-            sidebarParticipants = iframeElement.querySelector("#participant-window");
+            sidebarParticipants = iframeElement.querySelector('#participant-window');
             if(sidebarParticipants) {
                 clearInterval(intervalClick);
                 callBack(sidebarParticipants);
@@ -136,10 +136,10 @@ const openSidebarParticipants = (iframeElement, callBack) => {
         if (!participantContainerBtn) {
             const svg = iframeElement.querySelector('.SvgParticipants');
             if (!svg) {
-                const moreBtn = iframeElement.querySelector("#moreButton");
+                const moreBtn = iframeElement.querySelector('#moreButton');
                 if (!moreBtn) return;
 
-                const btn = moreBtn.querySelector("button");
+                const btn = moreBtn.querySelector('button');
                 if (btn) btn.click();
                 return;
             }
@@ -171,7 +171,7 @@ const findWcLoading = (doc) => {
     } catch (e) {
         return null;
     }
-}
+};
 
 const main = () => {
     let intervalIframe = setInterval(() => {

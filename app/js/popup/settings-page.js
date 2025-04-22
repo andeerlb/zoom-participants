@@ -1,5 +1,5 @@
-import { removeStorage, saveToStorage, getJsonFromUrl } from "./utils.js"
-import { state } from "./index.js"
+import { removeStorage, saveToStorage, getJsonFromUrl } from './utils.js';
+import { state } from './index.js';
 
 const showStatus = (message, color, statusDiv) => {
     statusDiv.textContent = message;
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (fetchJsonFromUrl) {
                 getJsonFromUrl(textarea, jsonUrlEl, statusDiv);
             } else {
-                saveToStorage("json", JSON.parse(textarea.value));
+                saveToStorage('json', JSON.parse(textarea.value));
             }
             state.refreshRequired = true;
             showStatus('JSON saved with success!', 'green', statusDiv);

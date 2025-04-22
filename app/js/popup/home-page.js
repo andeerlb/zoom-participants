@@ -1,5 +1,5 @@
 'use strict';
-import { state } from "./index.js"
+import { state } from './index.js';
 
 const summary = (accordionContainer, data) => {
     const homePageContainer = document.getElementById('home-page');
@@ -32,14 +32,14 @@ const summary = (accordionContainer, data) => {
     summaryContainer.innerHTML += `<p>unkown: ${unknownOnlineCount}</p>`;
 
     homePageContainer.insertBefore(summaryContainer, accordionContainer);
-}
+};
 
 const accordionByGroup = (accordionContainer, groupData) => {
     console.log(groupData);
     const accordion = document.createElement('button');
     accordion.classList.add('accordion');
     accordion.textContent = `${groupData.groupedBy} (on: ${groupData.online.length} / off: ${groupData.offline.length})`;
-    if(groupData.groupedBy !== "unknown") {
+    if(groupData.groupedBy !== 'unknown') {
         accordion.classList.add(groupData.responsibleOnline ? 'online' : 'offline');
     }
 
@@ -121,4 +121,4 @@ export const createListener = () => {
             document.getElementById('accordionContainer').innerHTML = '<p class=\'notifications\'>You need to configure json, go to the settings page.</p>';
         }
     });
-}
+};

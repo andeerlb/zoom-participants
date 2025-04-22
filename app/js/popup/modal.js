@@ -1,5 +1,5 @@
 'use strict';
-import { openModal, closeModal } from "./utils.js";
+import { openModal, closeModal } from './utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#search-action').addEventListener('click', function () {

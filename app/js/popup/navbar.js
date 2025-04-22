@@ -1,6 +1,6 @@
 'use strict';
-import { state  } from "./index.js";
-import { refreshList } from "./utils.js";
+import { state  } from './index.js';
+import { refreshList } from './utils.js';
 
 const showPage = (pageId) => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));

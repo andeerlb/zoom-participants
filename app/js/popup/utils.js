@@ -77,12 +77,12 @@ export const removeStorage = (key, callback) => {
 export const openModal = () => {
     let modalEl = document.querySelector('.modal');
     modalEl.classList.remove('hide');
-}
+};
 
 export const closeModal = () => {
     let modalEl = document.querySelector('.modal');
     modalEl.classList.add('hide');
-}
+};
 
 export const getJsonFromUrl = (textarea, jsonUrlEl, statusDiv) => {
     textarea.disabled = true;
@@ -92,7 +92,7 @@ export const getJsonFromUrl = (textarea, jsonUrlEl, statusDiv) => {
     fetch(jsonUrl)
         .then(response => response.json())
         .then(data => {
-            saveToStorage("json", data);
+            saveToStorage('json', data);
             textarea.value = JSON.stringify(data, null, 2);
         })
         .catch(error => {
