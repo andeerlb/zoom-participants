@@ -1,6 +1,7 @@
 'use strict';
+import { state } from "./state.js";
 
-export const summary = (accordionContainer, data) => {
+const summary = (accordionContainer, data) => {
     const homePageContainer = document.getElementById('home-page');
     const summaryContainer = document.createElement('div');
     summaryContainer.id = 'summary';
@@ -33,7 +34,7 @@ export const summary = (accordionContainer, data) => {
     homePageContainer.insertBefore(summaryContainer, accordionContainer);
 };
 
-export const accordionByGroup = (accordionContainer, groupData) => {
+const accordionByGroup = (accordionContainer, groupData) => {
     const accordion = document.createElement('button');
     accordion.classList.add('accordion');
     accordion.textContent = `${groupData.groupedBy} (on: ${groupData.online.length} / off: ${groupData.offline.length})`;
@@ -91,6 +92,32 @@ export const accordionByGroup = (accordionContainer, groupData) => {
             accordion.style.borderBottomRightRadius = '8px';
             accordion.style.borderBottomLeftRadius = '8px';
             accordion.style.marginBottom = '0px';
+        }
+    });
+};
+
+export const createListener = () => {
+    chrome.runtime.onMessage.addListener(message => {
+        if (message.origin === 'background' && message.action === 'participants') {
+            state.refreshRequired = false;
+            state.refreshOnWay = false;
+            if (message.data) {
+                let loadingEl = document.getElementById('loading');
+                if (loadingEl) {
+                    loadingEl.remove();
+                }
+
+                const accordionContainer = document.getElementById('accordionContainer');
+                summary(accordionContainer, message.data);
+                message.data.forEach(group => {
+                    accordionByGroup(accordionContainer, group);
+                });
+            }
+        }
+
+        if (message.origin === 'background' && message.action === 'no_json_config') {
+            state.refreshOnWay = false;
+            document.getElementById('accordionContainer').innerHTML = '<p class=\'notifications\'>You need to configure json, go to the settings page.</p>';
         }
     });
 };
