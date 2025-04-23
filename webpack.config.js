@@ -6,12 +6,15 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const isProd = process.env.NODE_ENV === 'production';
 
 export default {
-  mode: 'production',
+  mode: isProd ? 'production' : 'development',
+  devtool: isProd ? false : 'source-map',
   entry: {
     bundle: [
       './app/js/popup/index.js',
@@ -84,6 +87,13 @@ export default {
       patterns: [
         { from: 'assets', to: 'assets' },
       ],
+    }),
+    new ESLintPlugin({
+      context: path.resolve(__dirname, 'app/js'),
+      extensions: ['js'],
+      failOnError: true,
+      emitWarning: true,
+      lintDirtyModulesOnly: true,
     }),
     new WebpackManifestPlugin({
       fileName: 'manifest.json',
