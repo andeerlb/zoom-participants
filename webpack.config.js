@@ -13,20 +13,27 @@ const __dirname = path.dirname(__filename);
 export default {
   mode: 'production',
   entry: {
-    index: './app/js/popup/index.js',
-    homePage: './app/js/popup/home-page.js',
-    modal: './app/js/popup/modal.js',
-    navbar: './app/js/popup/navbar.js',
-    settingsPage: './app/js/popup/settings-page.js',
-    utils: './app/js/popup/utils.js',
+    bundle: [
+      './app/js/popup/index.js',
+      './app/js/popup/home-page.js',
+      './app/js/popup/modal.js',
+      './app/js/popup/navbar.js',
+      './app/js/popup/settings-page.js',
+      './app/js/popup/utils.js',
+      './app/js/popup/state.js',
+    ],
     zoomScript: './app/js/zoom-script.js',
     background: './app/js/background.js',
-    state: './app/js/popup/state.js',
   },
   output: {
-    filename: 'js/[name].[contenthash].js',
+    filename: 'js/[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
+  },
+  optimization: {
+    splitChunks: false,
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
   module: {
     rules: [
@@ -68,7 +75,7 @@ export default {
     new HtmlWebpackPlugin({
       template: './app/popup.html',
       filename: 'popup.html',
-      chunks: ['index', 'homePage', 'modal', 'navbar', 'settingsPage', 'utils'],
+      chunks: ['bundle'],
     }),
     new MiniCssExtractPlugin({
       filename: '[contenthash].css',
