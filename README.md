@@ -1,39 +1,58 @@
 # Zoom Participants
 
-This is a browser extension that checks which participants are present in a Zoom meeting, based on a predefined list of people and their respective responsible parties.
+**Zoom Participants** is a browser extension that helps track attendance in Zoom meetings by comparing current participants with a predefined list of people and their assigned supervisors.
 
-## Overview
+## 🧩 Overview
 
-The extension reads a JSON containing participant names and their assigned responsible persons. Once activated during a Zoom meeting, it checks who is present and displays:
+The extension allows you to:
 
-- The list of participants grouped by their responsible and will show who is online and offline..
-- Participants in the meeting who are not assigned to any responsible.
+- Load a list of expected participants from a JSON file.
+- Automatically check who is present in the Zoom meeting.
+- Display participants grouped by their assigned supervisors, indicating who is online and offline.
+- Identify participants in the meeting who are not assigned to any supervisor.
 
-## Installation
+## ⚙️ How to Use
 
-Open your browser's extensions page:
-- **Chrome**: `chrome://extensions`
+1. Prepare a JSON file with the expected participants and their supervisors.
+2. During a Zoom meeting, activate the extension.
+3. The extension will analyze the participants and display:
+   - Present participants grouped by supervisor.
+   - Absent participants.
+   - Unassigned participants not linked to any supervisor.
 
-Enable **Developer mode**.
+## 🛠️ Project Build
 
-Click **Load unpacked** and select the `zoom-participants` folder.
+To generate the final version of the extension, you need to build the files using Webpack. Follow these steps to build the project:
 
-## Usage
+### 1. Install Dependencies
 
-1. Join a Zoom meeting using your browser.
-2. Click the extension icon in the browser toolbar.
-3. The extension will:
-   - Read the predefined JSON list of participants and their responsible.
-   - Compare it with the current Zoom meeting participants.
-   - Display the participants grouped by their responsible.
-   - Show which participants are present without an assigned responsible.
+If you haven't installed the project dependencies yet, run the following command in the root of the project:
 
-## File Structure
+- **Install dependencies**:  
+`npm install`
 
-- `manifest.json` — Extension configuration  
-- `index.html` — Popup interface  
-- `index.js` — Main popup logic  
-- `zoom_script.js` — Script injected into the Zoom page to collect data  
-- `background.js` — Handles background operations  
-- `style.css` — UI styling  
-- `json_example.json` — Sample input json format  
+This will install all the required packages needed for the project.
+
+### 2. Build the Extension Files
+
+After installing the dependencies, run the following command to build the extension:
+
+- build for dev test `npm run dev`
+- build for prod `npm run build`
+
+This will:
+
+- Compile and bundle the files using Webpack.
+- Create a `dist/` folder in the project directory, containing the final files ready to be used as a browser extension.
+
+### 3. Test the Extension in the Browser
+
+Once the build is complete, the `dist/` folder will be created with the final files. To test the extension in your browser:
+
+1. Open the browser and go to the extensions page:
+   - **Chrome**: `chrome://extensions/`
+2. Enable **Developer mode**.
+3. Click on **Load unpacked**.
+4. Select the `dist/` folder created after the build.
+
+The extension will now be loaded and ready to use in your browser!
