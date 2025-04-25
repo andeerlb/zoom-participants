@@ -28,11 +28,11 @@ const summary = (accordionContainer, data) => {
     });
 
 
-    summaryContainer.innerHTML = `<p>ON: ${onlineCount} of ${total}</p>`;
-    summaryContainer.innerHTML += `<p>OFF: ${offlineCount}</p>`;
+    summaryContainer.innerHTML = `<span>ON: <p>${onlineCount} of ${total}</p></span>`;
+    summaryContainer.innerHTML += `<span>OFF: <p>${offlineCount}</p></span>`;
 
     if(unknownOnlineCount) {
-        summaryContainer.innerHTML += `<p>UNKOWN: ${unknownOnlineCount}</p>`;
+        summaryContainer.innerHTML += `<span>UNKOWN: <p>${unknownOnlineCount}</p></span>`;
     }
 
     homePageContainer.insertBefore(summaryContainer, accordionContainer);

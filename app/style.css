@@ -213,25 +213,38 @@ button.accordion:hover {
 }
 
 #summary {
+
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  font-weight: 900;
-  font-size: 13px;
-  margin-bottom: 20px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-weight: 900;
+    font-size: 13px;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: #ffffff;
 }
 
-#summary > p:nth-child(1) {
+#summary > span {
+  display: inherit;
+}
+
+#summary > span > p {
+  margin-left: 5px;
+}
+
+#summary > span:nth-child(1) > p {
   color: green;
 }
 
-#summary > p:nth-child(2) {
+#summary > span:nth-child(2) > p {
   color: #ef4444;
 }
 
-#summary > p:nth-child(3) {
+#summary > span:nth-child(3) > p {
   color: white;
 }
 
