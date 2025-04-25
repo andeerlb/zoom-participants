@@ -1,7 +1,7 @@
 
 'use strict';
 
-const INTERLVAL_MS = 1000;
+const INTERLVAL_MS = 500;
 
 const collectAllVisibleParticipants = async (sidebarParticipants) => {
     const collected = new Set();
