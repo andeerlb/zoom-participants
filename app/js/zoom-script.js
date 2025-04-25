@@ -3,32 +3,32 @@
 
 const INTERLVAL_MS = 1000;
 
-// Scroll and collect visible names
-const collectAllVisibleParticipants = (sidebarParticipants) => {
-    return new Promise(resolve => {
-        let scrollTop = 0;
-        const scrollStep = 100;
-        const delay = 200; // wait between scrolls
-        const collected = new Set();
+const collectAllVisibleParticipants = async (sidebarParticipants) => {
+    const collected = new Set();
+    const scrollStep = 100;
+    const delay = 200;
 
-        function scrollAndCollect() {
-            const elements = document.querySelectorAll('span.participants-item__display-name');
-            elements.forEach(el => collected.add(el.innerText.trim()));
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-            if (sidebarParticipants.scrollTop + sidebarParticipants.clientHeight >= sidebarParticipants.scrollHeight - 10) {
-                resolve(collected);
-                return;
-            }
+    const collectFromDOM = () => {
+        const elements = sidebarParticipants.querySelectorAll('span.participants-item__display-name');
+        elements.forEach(el => collected.add(el.innerText.trim()));
+    };
 
-            scrollTop += scrollStep;
-            sidebarParticipants.scrollTop = scrollTop;
-            setTimeout(scrollAndCollect, delay);
-        }
+    sidebarParticipants.scrollTop = 0;
+    await sleep(delay);
 
-        // Start from top
-        sidebarParticipants.scrollTop = 0;
-        setTimeout(scrollAndCollect, delay);
-    });
+    while (true) {
+        collectFromDOM();
+
+        const { scrollTop, scrollHeight, clientHeight } = sidebarParticipants;
+        if (scrollTop + clientHeight >= scrollHeight - 10) break;
+
+        sidebarParticipants.scrollTop += scrollStep;
+        await sleep(delay);
+    }
+
+    return collected;
 };
 
 function getStorageSync() {

@@ -29,7 +29,7 @@ export default {
     background: './app/js/background.js',
   },
   output: {
-    filename: 'js/[contenthash].js',
+    filename: `js/${isProd ? '' : '[name].'}[contenthash].js`,
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
