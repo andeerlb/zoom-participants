@@ -65,16 +65,10 @@ const loadConfig = async () => {
     }
 };
 
-const checkParticipants = async (sidebarParticipants) => {
+const checkParticipants = async (configState, sidebarParticipants) => {
     const currentVisibleNames = await collectAllVisibleParticipants(sidebarParticipants);
 
-    let dataConfig = await loadConfig();
-
-    if (!dataConfig || !dataConfig.length) {
-        return;
-    }
-
-    let newModel = dataConfig.map(data => {
+    let newModel = configState.map(data => {
         const online = data.people.filter(name => currentVisibleNames.has(name));
         const offline = data.people.filter(name => !currentVisibleNames.has(name));
         const responsibleOnline = currentVisibleNames.has(data.groupedBy);
@@ -89,8 +83,8 @@ const checkParticipants = async (sidebarParticipants) => {
     let unknownLeadArray = [];
     currentVisibleNames.forEach(name => {
         let found = false;
-        for (let i = 0; i < dataConfig.length; i++) {
-            if (dataConfig[i].groupedBy.includes(name) || dataConfig[i].people.includes(name)) {
+        for (let i = 0; i < configState.length; i++) {
+            if (configState[i].groupedBy.includes(name) || configState[i].people.includes(name)) {
                 found = true;
                 break;
             }
@@ -115,20 +109,20 @@ const checkParticipants = async (sidebarParticipants) => {
     });
 };
 
-const openSidebarParticipants = (iframeElement, callBack) => {
+const openSidebarParticipants = (configState, iframeElement) => {
     let intervalClick = setInterval(() => {
         const participantContainerBtn = iframeElement.querySelector('#participant');
         let sidebarParticipants = iframeElement.querySelector('#participants-ul');
 
         if (sidebarParticipants) {
             clearInterval(intervalClick);
-            callBack(sidebarParticipants);
+            checkParticipants(configState, sidebarParticipants);
             return;
         } else {
             sidebarParticipants = iframeElement.querySelector('#participant-window');
             if(sidebarParticipants) {
                 clearInterval(intervalClick);
-                callBack(sidebarParticipants);
+                checkParticipants(configState, sidebarParticipants);
                 return;
             }
         }
@@ -160,7 +154,7 @@ const openSidebarParticipants = (iframeElement, callBack) => {
             if (!sidebar) return;
 
             clearInterval(intervalParticipants);
-            callBack(sidebar);
+            checkParticipants(configState, sidebar);
         }, INTERLVAL_MS);
     }, INTERLVAL_MS);
 };  
@@ -173,7 +167,12 @@ const findWcLoading = (doc) => {
     }
 };
 
-const main = () => {
+const main = async () => {
+    let configState = await loadConfig();
+    if(!configState || !configState.length) {
+        return;
+    }
+
     let intervalIframe = setInterval(() => {
         let loadingZoom = findWcLoading(document);
         let iframeElement;
@@ -199,7 +198,7 @@ const main = () => {
         }
 
         clearInterval(intervalIframe);
-        openSidebarParticipants(iframeElement, checkParticipants);
+        openSidebarParticipants(configState, iframeElement);
     }, INTERLVAL_MS);
 };
 
