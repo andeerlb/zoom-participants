@@ -9,12 +9,13 @@ const summary = (accordionContainer, data) => {
     let onlineCount = 0;
     let offlineCount = 0;
     let unknownOnlineCount = 0;
+    let total = 0;
 
     data.forEach(item => {
-
         if (item.groupedBy === 'unknown') {
             unknownOnlineCount += item.online.length;
         } else {
+            total += item.online.length + item.offline.length + 1;
             onlineCount += item.online.length;
             offlineCount += item.offline.length;
 
@@ -27,9 +28,12 @@ const summary = (accordionContainer, data) => {
     });
 
 
-    summaryContainer.innerHTML = `<p>on: ${onlineCount}</p>`;
-    summaryContainer.innerHTML += `<p>off: ${offlineCount}</p>`;
-    summaryContainer.innerHTML += `<p>unkown: ${unknownOnlineCount}</p>`;
+    summaryContainer.innerHTML = `<p>ON: ${onlineCount} of ${total}</p>`;
+    summaryContainer.innerHTML += `<p>OFF: ${offlineCount}</p>`;
+
+    if(unknownOnlineCount) {
+        summaryContainer.innerHTML += `<p>UNKOWN: ${unknownOnlineCount}</p>`;
+    }
 
     homePageContainer.insertBefore(summaryContainer, accordionContainer);
 };
